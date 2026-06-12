@@ -55,7 +55,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .sync.err{color:#c44;background:#fff6f6;border-color:#fcc}
 .ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:100;align-items:flex-end;justify-content:center}
 .ov.open{display:flex}
-.sh{background:#fff;border-radius:16px 16px 0 0;width:100%;max-width:440px;padding:0 14px 32px;animation:up .2s ease}
+.sh{background:#fff;border-radius:16px 16px 0 0;width:100%;max-width:440px;padding:0 14px 32px;animation:up .2s ease;max-height:88vh;overflow-y:auto}
 @keyframes up{from{transform:translateY(60px);opacity:0}to{transform:translateY(0);opacity:1}}
 .drg{width:36px;height:4px;background:#e0e0e0;border-radius:2px;margin:12px auto 14px}
 .mbg{display:inline-flex;font-size:10px;font-weight:700;padding:3px 9px;border-radius:14px;margin-bottom:6px}
@@ -74,9 +74,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .qc{padding:4px 9px;border-radius:14px;border:1px solid #ebebeb;background:#fafafa;font-size:10px;color:#777;cursor:pointer;transition:all .12s;touch-action:manipulation}
 .qc:active{background:#eee}
 .qc.pk{border-color:#1a2332;background:#1a2332;color:#fff}
-.ni{width:100%;border:1.5px solid #ebebeb;border-radius:8px;padding:9px 11px;font-size:13px;font-family:inherit;background:#fafafa;color:#222;resize:none;outline:none;-webkit-appearance:none}
+.ni{width:100%;border:1.5px solid #ebebeb;border-radius:8px;padding:9px 11px;font-size:13px;font-family:inherit;background:#fafafa;color:#222;resize:none;outline:none;-webkit-appearance:none;margin-bottom:10px}
 .ni:focus{border-color:#888;background:#fff}
-.mac{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:12px}
+.mac{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:4px}
 .mok{padding:13px;border-radius:10px;border:none;background:#1a2332;color:#fff;font-size:13px;font-weight:700;cursor:pointer}
 .mok:active{background:#2c3a50}
 .mcc{padding:13px;border-radius:10px;border:1.5px solid #ebebeb;background:#fafafa;color:#aaa;font-size:13px;font-weight:600;cursor:pointer}
@@ -93,6 +93,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .pw-cc{padding:12px;border-radius:8px;border:1.5px solid #ebebeb;background:#fafafa;color:#aaa;font-size:13px;cursor:pointer}
 .toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:#1a2332;color:#fff;font-size:12px;padding:8px 18px;border-radius:20px;pointer-events:none;z-index:300;white-space:nowrap;opacity:0;transition:opacity .25s}
 .toast.on{opacity:1}
+.ci{font-size:7px;color:#999;line-height:1.2;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:0 1px}
+.cd.run .ci{color:#0d6640}
+.cd.maint .ci{color:#8a5200;font-weight:700}
+.rview{background:#fdf6e8;border:1.5px solid #f3ddae;border-radius:8px;padding:8px 10px;font-size:12px;color:#8a5200;margin-bottom:10px;white-space:pre-wrap;line-height:1.4}
 </style>
 </head>
 <body>
@@ -136,16 +140,36 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
     <div class="mbg mbs" id="mbg">Stopped</div>
     <div class="mti" id="mti">A-1</div>
     <div class="msu" id="msu">Dong Shin &middot; 250 ton</div>
+
+    <div id="repairView" style="display:none">
+      <div class="mlbl">Current repair status</div>
+      <div class="rview" id="repairViewText"></div>
+    </div>
+
     <div class="mlbl">Status</div>
     <div class="mbtn3">
       <button class="mb" id="bR" onclick="pSt('run')"><svg viewBox="0 0 24 24"><polygon points="6,4 20,12 6,20"/></svg>Run</button>
       <button class="mb" id="bS" onclick="pSt('stop')"><svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="1"/></svg>Stop</button>
       <button class="mb" id="bM" onclick="pSt('maint')"><svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>Maint</button>
     </div>
-    <div class="mlbl">Quick Remarks</div>
-    <div class="qr" id="qr"></div>
-    <div class="mlbl">Notes</div>
-    <textarea class="ni" id="nb" rows="2" placeholder="Die change, Oil leak, PM check..."></textarea>
+
+    <div id="itemBlock" style="display:none">
+      <div class="mlbl">Item / part being produced</div>
+      <input type="text" class="ni" id="itemIn" placeholder="e.g. Bracket-LH 12345 / Door Hinge">
+    </div>
+
+    <div id="noteBlock">
+      <div class="mlbl" id="noteLbl">Quick remarks</div>
+      <div class="qr" id="qr"></div>
+      <div class="mlbl">Notes</div>
+      <textarea class="ni" id="nb" rows="2" placeholder="Die change, Oil leak, PM check..."></textarea>
+    </div>
+
+    <div id="repairBlock" style="display:none">
+      <div class="mlbl">Repair action / progress</div>
+      <textarea class="ni" id="rep" rows="3" placeholder="e.g. Hydraulic hose replaced 14:30, pressure test in progress, ETA 16:00..."></textarea>
+    </div>
+
     <div class="mac">
       <button class="mcc" onclick="clSh()">Cancel</button>
       <button class="mok" onclick="savCard()">OK</button>
@@ -178,9 +202,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
    CONFIGURATION - 아래 두 곳만 수정하세요
    ============================================================ */
 
-// 1) Firebase config (Firebase 콘솔에서 복사)
 var FIREBASE_CONFIG = {
-  aapiKey: "AIzaSyBUa9MrF7WtRcGkAMTVI-TwsJIA9ramnR4",
+  apiKey: "AIzaSyBUa9MrF7WtRcGkAMTVI-TwsJIA9ramnR4",
   authDomain: "idas-tandem-press.firebaseapp.com",
   databaseURL: "https://idas-tandem-press-default-rtdb.asia-southeast1.firebasedatabase.app",
   projectId: "idas-tandem-press",
@@ -189,7 +212,6 @@ var FIREBASE_CONFIG = {
   appId: "1:513104641436:web:511509ee27b608b9fa5c59"
 };
 
-// 2) Admin password (원하는 비밀번호로 변경)
 var ADMIN_PW = 'idas2026';
 
 /* ============================================================ */
@@ -227,7 +249,6 @@ function initFB(){
     DB = firebase.database();
     FB_OK = true;
 
-    // Listen for real-time updates
     DB.ref('status').on('value', function(snap){
       var d = snap.val();
       if (d) {
@@ -249,7 +270,6 @@ function initFB(){
 
 function fbSave(){
   if (!FB_OK || !DB) {
-    // Local-only fallback
     try { localStorage.setItem('das_local', JSON.stringify({st:ST,sh:SHIFT})); } catch(e){}
     toast('Saved locally (no Firebase)');
     return;
@@ -274,12 +294,14 @@ function showUpdated(ts){
 
 /* ---- Init ---- */
 function init(){
-  for(var i=0;i<32;i++) ST[i]={s:'stop',note:''};
+  for(var i=0;i<32;i++) ST[i]={s:'stop',note:'',item:'',repair:''};
 
-  // Try load local as fallback
   try{
     var raw=localStorage.getItem('das_local');
-    if(raw){var d=JSON.parse(raw);if(d.st){for(var k in d.st)ST[k]=d.st[k];}if(typeof d.sh==='number')SHIFT=d.sh;}
+    if(raw){var d=JSON.parse(raw);if(d.st){for(var k in d.st){
+      var e=d.st[k];
+      ST[k]={s:e.s||'stop',note:e.note||'',item:e.item||'',repair:e.repair||''};
+    }}if(typeof d.sh==='number')SHIFT=d.sh;}
   }catch(e){}
 
   setShUI(SHIFT);
@@ -347,11 +369,8 @@ function buildBoard(){
       (function(idx){
         var m=MC[idx],s=ST[idx].s;
         var cd=document.createElement('div');cd.className='cd '+s;cd.id='c'+idx;
-        cd.innerHTML='<div class="dd"></div><div class="cn">'+m.n+'</div><div class="ct">'+m.t+'T</div>';
-        cd.addEventListener('click',function(){
-          if(!ADMIN){toast('Tap Admin Save to login first');return;}
-          openSh(idx);
-        });
+        cd.innerHTML=cardInner(idx);
+        cd.addEventListener('click',function(){ openSh(idx); });
         gr.appendChild(cd);
       })(items[k]);
     }
@@ -359,11 +378,26 @@ function buildBoard(){
   }
 }
 
+function esc(s){
+  var d=document.createElement('div');d.textContent=s||'';return d.innerHTML;
+}
+
+function cardInner(idx){
+  var st=ST[idx], m=MC[idx];
+  var extra='';
+  if(st.s==='run' && st.item){
+    extra='<div class="ci" title="'+esc(st.item)+'">'+esc(st.item)+'</div>';
+  } else if(st.s==='maint'){
+    extra='<div class="ci">'+(st.repair? 'tap for status':'no repair info')+'</div>';
+  }
+  return '<div class="dd"></div><div class="cn">'+m.n+'</div><div class="ct">'+m.t+'T</div>'+extra;
+}
+
 function refreshC(idx){
   var cd=document.getElementById('c'+idx);if(!cd)return;
   var s=ST[idx].s;
   cd.className='cd '+s;
-  cd.innerHTML='<div class="dd"></div><div class="cn">'+MC[idx].n+'</div><div class="ct">'+MC[idx].t+'T</div>';
+  cd.innerHTML=cardInner(idx);
 }
 
 function updateStats(){
@@ -380,11 +414,22 @@ function updateStats(){
 /* ---- Edit Sheet ---- */
 function openSh(idx){
   CUR=idx;SEL=ST[idx].s;
-  var m=MC[idx];
+  var m=MC[idx], st=ST[idx];
   document.getElementById('mti').textContent=m.n;
   document.getElementById('msu').textContent=m.mk+' \u00b7 '+m.t+' ton';
-  document.getElementById('nb').value=ST[idx].note||'';
-  setBg(SEL);setBtn(SEL);bldQ(SEL,ST[idx].note||'');
+  document.getElementById('nb').value=st.note||'';
+  document.getElementById('itemIn').value=st.item||'';
+  document.getElementById('rep').value=st.repair||'';
+
+  if(st.s==='maint' && st.repair){
+    document.getElementById('repairView').style.display='block';
+    document.getElementById('repairViewText').textContent=st.repair;
+  } else {
+    document.getElementById('repairView').style.display='none';
+  }
+
+  setBg(SEL);setBtn(SEL);bldQ(SEL,st.note||'');
+  updateFieldVisibility(SEL);
   document.getElementById('ov').classList.add('open');
 }
 function setBg(s){
@@ -396,6 +441,11 @@ function setBtn(s){
   document.getElementById('bR').className='mb'+(s==='run'?' xrun':'');
   document.getElementById('bS').className='mb'+(s==='stop'?' xstop':'');
   document.getElementById('bM').className='mb'+(s==='maint'?' xmaint':'');
+}
+function updateFieldVisibility(s){
+  document.getElementById('itemBlock').style.display = (s==='run') ? 'block' : 'none';
+  document.getElementById('repairBlock').style.display = (s==='maint') ? 'block' : 'none';
+  document.getElementById('noteLbl').textContent = (s==='maint') ? 'Quick remarks (issue type)' : 'Quick remarks';
 }
 function bldQ(s,cur){
   var ch=QN[s]||[];var el=document.getElementById('qr');el.innerHTML='';
@@ -411,12 +461,17 @@ function bldQ(s,cur){
     })(ch[i]);
   }
 }
-function pSt(s){SEL=s;setBg(s);setBtn(s);bldQ(s,document.getElementById('nb').value);}
+function pSt(s){
+  SEL=s;setBg(s);setBtn(s);bldQ(s,document.getElementById('nb').value);
+  updateFieldVisibility(s);
+}
 
 function savCard(){
   if(CUR<0)return;
   ST[CUR].s=SEL;
   ST[CUR].note=document.getElementById('nb').value.trim();
+  ST[CUR].item = (SEL==='run') ? document.getElementById('itemIn').value.trim() : ST[CUR].item;
+  ST[CUR].repair = (SEL==='maint') ? document.getElementById('rep').value.trim() : ST[CUR].repair;
   refreshC(CUR);updateStats();clSh();
   var l={run:'Running',stop:'Stopped',maint:'Maintenance'};
   toast(MC[CUR].n+' \u2192 '+l[SEL]+' (tap Publish to save)');
@@ -439,7 +494,10 @@ function buildRpt(){
     txt+=sep+'\n';
     for(var j=0;j<iss.length;j++){
       var x=iss[j];var ic=ST[x].s==='run'?'[RUN]':ST[x].s==='maint'?'[MNT]':'[STP]';
-      txt+=ic+' '+(MC[x].n+'    ').slice(0,5)+MC[x].t+'T '+(ST[x].note||'')+'\n';
+      var extra='';
+      if(ST[x].s==='run' && ST[x].item) extra=' | Item: '+ST[x].item;
+      if(ST[x].s==='maint' && ST[x].repair) extra=' | Repair: '+ST[x].repair;
+      txt+=ic+' '+(MC[x].n+'    ').slice(0,5)+MC[x].t+'T '+(ST[x].note||'')+extra+'\n';
     }
   }
   txt+=sep;return txt;
@@ -471,7 +529,6 @@ function tick(){
   var mo=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   document.getElementById('sdt').textContent=d[n.getDay()]+' '+mo[n.getMonth()]+' '+n.getDate();
 }
-// Listen for Enter key in password
 document.addEventListener('keydown',function(e){
   if(document.getElementById('pwov').classList.contains('open')&&e.key==='Enter')tryPw();
 });
