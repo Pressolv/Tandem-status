@@ -31,7 +31,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .lhdr{padding:5px 10px;font-size:9px;font-weight:700;color:#bbb;letter-spacing:.08em;text-transform:uppercase;background:#fafaf8;border-top:1px solid #f0f0f0;border-bottom:1px solid #f0f0f0;display:flex;justify-content:space-between}
 .lsub{font-size:9px;color:#ddd;font-weight:500;text-transform:none;letter-spacing:0}
 .gr{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;padding:5px 6px 4px}
-.cd{border:1.5px solid #e5e5e5;border-radius:6px;padding:5px 3px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:1px;min-height:46px;justify-content:center;background:#fff;transition:all .12s;-webkit-user-select:none;user-select:none;touch-action:manipulation}
+.cd{border:1.5px solid #e5e5e5;border-radius:6px;padding:5px 3px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;min-height:54px;justify-content:center;background:#fff;transition:all .12s;-webkit-user-select:none;user-select:none;touch-action:manipulation}
 .cd:active{transform:scale(.92)}
 .cd.run{border-color:#1D9E75;background:#f0faf5}
 .cd.stop{border-color:#e5e5e5;background:#fff}
@@ -93,9 +93,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .pw-cc{padding:12px;border-radius:8px;border:1.5px solid #ebebeb;background:#fafafa;color:#aaa;font-size:13px;cursor:pointer}
 .toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:#1a2332;color:#fff;font-size:12px;padding:8px 18px;border-radius:20px;pointer-events:none;z-index:300;white-space:nowrap;opacity:0;transition:opacity .25s}
 .toast.on{opacity:1}
-.ci{font-size:7px;color:#999;line-height:1.2;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:0 1px}
-.cd.run .ci{color:#0d6640}
-.cd.maint .ci{color:#8a5200;font-weight:700}
+.ci{font-size:9px;font-weight:700;color:#0d6640;line-height:1.25;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:1px 2px;background:rgba(29,158,117,.12);border-radius:3px;margin-top:1px}
+.cd.maint .ci{color:#8a5200;background:rgba(212,136,10,.14)}
 .rview{background:#fdf6e8;border:1.5px solid #f3ddae;border-radius:8px;padding:8px 10px;font-size:12px;color:#8a5200;margin-bottom:10px;white-space:pre-wrap;line-height:1.4}
 </style>
 </head>
